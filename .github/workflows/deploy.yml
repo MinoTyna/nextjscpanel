@@ -21,7 +21,7 @@ jobs:
       - name: Build Next.js
         run: |
           npm install
-          npm run build
+          npm run build   # génère ./out/
 
       - name: Deploy to cPanel via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
@@ -29,5 +29,5 @@ jobs:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USER }}
           password: ${{ secrets.CPANEL_PASS }}
-          local-dir: ./out/ # <-- le slash à la fin est obligatoire
+          local-dir: ./out/ # <-- doit exister après npm run build
           server-dir: /public_html/auf-sarlu.mg/christine@auf-sarlu.mg/
