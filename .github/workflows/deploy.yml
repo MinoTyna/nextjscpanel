@@ -1,38 +1,43 @@
-name: Deploy to FTP
+name: Deploy Next.js SSR to cPanel
 
 on:
   push:
     branches:
-      - main # Adjust the branch name if needed
+      - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # 1️⃣ Récupérer le code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      # 2️⃣ Installer Node.js 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.21.2 # Use the desired Node.js version
+          node-version: "18"
 
-      - name: Install dependencies and build Next.js app
+      # 3️⃣ Installer les dépendances et build
+      - name: Install dependencies and build
         run: |
-          yarn install  # Install project dependencies
+          yarn install
+          # Créer fichier .env.local avec secrets
           touch .env.local
           echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env.local
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env.local
-          yarn build  # Build Next.js app
+          yarn build
 
+      # 4️⃣ Déployer via FTPS sur cPanel
       - name: Deploy via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
           password: ${{ secrets.CPANEL_PASSWORD }}
-          local-dir: ./ # This points to the build output directory of your Next.js app
-          server-dir: /
+          local-dir: ./ # Racine du projet
+          server-dir: /public_html/myapp/ # Chemin du sous-domaine sur cPanel
           protocol: ftps
-          timeout: 300000 # Set a longer timeout value in milliseconds (here, 2 minutes)
+          timeout: 300000
