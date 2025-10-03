@@ -3,32 +3,28 @@ name: Deploy Next.js to cPanel
 on:
   push:
     branches:
-      - main # le workflow se déclenche à chaque push sur main
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Récupérer le code du repo
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Installer Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      # 3. Installer les dépendances et build + export Next.js
       - name: Build Next.js
         run: |
           npm install
           npm run build
 
-      # 4. Déployer sur cPanel via FTP
       - name: Deploy to cPanel via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v3
         with:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USER }}
