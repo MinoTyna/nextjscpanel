@@ -35,8 +35,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.CPANEL_USERNAME }}
-          password: ${{ secrets.CPANEL_PASSWORD }}
+          username: ${{ secrets.CPANEL_USER }}
+          password: ${{ secrets.CPANEL_PASS }}
           local-dir: ./ # Racine du projet
           server-dir: /public_html/myapp/ # Chemin du sous-domaine sur cPanel
           protocol: ftps
