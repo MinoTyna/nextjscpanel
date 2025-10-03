@@ -29,5 +29,5 @@ jobs:
           server: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USER }}
           password: ${{ secrets.CPANEL_PASS }}
-          local-dir: ./out
+          local-dir: ./out/ # <-- le slash à la fin est obligatoire
           server-dir: /public_html/auf-sarlu.mg/christine@auf-sarlu.mg/
